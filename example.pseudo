@@ -1,0 +1,61 @@
+-
+
+g[2-8] = "hi\t0\t0";
+g[0] = 1;
+g[1] = 0;
+for (int i=0; i<3; i++) {
+    down(g[0]);
+    g[0]++;
+    l[3] = g[0];
+    l[5] = g[1];
+    sleep(1);
+    printf("%s\n" g[2]);
+    up(g[0]);
+}
+exit;
+
+-
+
+SET reg1 104        // reg1 = 'h'
+GSTORE reg1 2
+SET reg1 105        // reg1 = 'i'
+GSTORE reg1 3
+SET reg1 9          // reg1 = '\t'
+GSTORE reg1 4
+GSTORE reg1 6
+SET reg1 48         // reg1 = '0'
+GSTORE reg1 5
+GSTORE reg1 7
+SET reg1 0          // reg1 = '\0'
+GSTORE reg1 8
+
+
+SET reg2 1          // reg3 = 1 (will stay 1)
+SET reg4 3          // reg4 = 3 (will stay 3)
+SET reg8 48
+
+DOWN - 0            // ... g[0]--; ...
+
+GLOAD reg5 1        // reg5 = g[1]
+ADD reg5 reg2       // reg5 = reg5 + reg2 = reg5 + 1
+GSTORE reg5 1       // g[1] = reg5
+
+GLOAD reg6 0        // reg6 = g[0]
+GLOAD reg7 1        // reg7 = g[1]
+ADD reg6 reg8
+ADD reg7 reg8
+GSTORE reg6 5       // g[5] = reg6
+GSTORE reg7 7       // g[7] = reg7
+
+SLEEP reg2 -        // sleep(reg3) (==sleep(1))
+PRINT - 2           // printf("%d: %s\n",id ,l[0]);
+
+UP - 0
+
+ADD reg1 reg2       // reg1 = reg1 + reg2 = reg1 + 1
+SET reg5 0          // reg5 = 0
+ADD reg5 reg4       // reg5 = reg5 + reg4 = 3
+SUB reg5 reg1       // reg5 = reg5 - reg1 = 3 - reg1
+
+BRGZ reg5 -17        // branch to DOWN if (reg5 > 0 )
+EXIT - -
