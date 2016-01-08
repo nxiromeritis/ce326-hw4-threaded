@@ -685,7 +685,10 @@ void *run_bin(void *arg) {
 		// if previous task was set perform the right action
 		if (cur_copy != NULL) {
 			if (cur_copy->state == STOPPED) {list_delete(cur_copy, worker);}
-			if (cur_copy->state == BLOCKED) {list_move_to(cur_copy, D_BLC, worker);}
+			if (cur_copy->state == BLOCKED) {
+				list_move_to(cur_copy, D_BLC, worker);
+				cur_copy->sem = ibyte3;
+			}
 			cur_copy = NULL;
 		}
 
@@ -900,7 +903,10 @@ void *run_bin(void *arg) {
 							   if (globalMem[ibyte3] < 0) {
 								   num_of_blocked++;
 								   cur[worker]->state = BLOCKED;
-								   cur[worker]->sem = ibyte3;
+								   // for synchronisation reasons this is set
+								   // later after cur_copy enters blocked list
+								   // See at the beggining of the while(1)
+								   /*cur[worker]->sem = ibyte3;*/
 								   cur_copy = cur[worker];
 							   }
 							   cur[worker]->pc += 3;
